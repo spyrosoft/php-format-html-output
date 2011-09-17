@@ -1,0 +1,15 @@
+A simple HTML formatter.
+
+Example:
+
+<?php
+
+include_once('format.php');
+
+$html = 'BIG STRING FULL OF HTML';
+
+$format = new Format;
+
+$formatted_html = $format->HTML($html);
+
+echo $formatted_html;
