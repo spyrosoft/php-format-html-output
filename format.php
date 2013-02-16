@@ -12,6 +12,7 @@ class Format
 	public function HTML($input)
 	{
 		$this->input = $input;
+		$this->output = '';
 		
 		$starting_index = 0;
 		
