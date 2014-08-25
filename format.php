@@ -28,6 +28,8 @@ class Format
 				$this->parse_comment();
 			} elseif ($this->in_tag) {
 				$this->parse_inner_tag();
+			} elseif ($this->inline_tag) {
+				$this->parse_inner_inline_tag();
 			} else {
 				if (preg_match('/[\r\n\t]/', $this->input[$this->input_index])) {
 					continue;
@@ -64,11 +66,18 @@ class Format
 	{
 		if ($this->input[$this->input_index] == '>') {
 			$this->in_tag = FALSE;
-			if ( ! $this->inline_tag) {
-				$this->output .= '>';
-			} else {
-				$this->output .= '>';
-			}
+			$this->output .= '>';
+		} else {
+			$this->output .= $this->input[$this->input_index];
+		}
+	}
+	
+	private function parse_inner_inline_tag()
+	{
+		if ($this->input[$this->input_index] == '>') {
+			$this->inline_tag = FALSE;
+			$this->decrement_tabs();
+			$this->output .= '>';
 		} else {
 			$this->output .= $this->input[$this->input_index];
 		}
@@ -215,7 +224,7 @@ class Format
 	private function is_inline_tag()
 	{
 		$inline_tags = array(
-			'title', 'a', 'span', 'abbr', 'acronym', 'b', 'basefont', 'bdo', 'big', 'cite', 'code', 'dfn', 'em', 'font', 'i', 'kbd', 'label', 'q', 's', 'samp', 'small', 'strike', 'strong', 'sub', 'sup', 'textarea', 'tt', 'u', 'var', 'del', 'pre',
+			'title', 'a', 'span', 'abbr', 'acronym', 'b', 'basefont', 'bdo', 'big', 'cite', 'code', 'dfn', 'em', 'font', 'i', 'kbd', 'q', 's', 'samp', 'small', 'strike', 'strong', 'sub', 'sup', 'textarea', 'tt', 'u', 'var', 'del', 'pre',
 		);
 		
 		$current_tag = '';
